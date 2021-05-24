@@ -1,14 +1,23 @@
 class Enemy {
-  constructor(coords, sound, imagePath) {
+  constructor(coords, sound, type) {
     this.x = coords.x;
     this.y = coords.y;
-    this.width = ENEMY_SPECS.width;
-    this.height = ENEMY_SPECS.height;
+    this.width = 0;
+    this.height = 0;
     this.sound = sound;
-    this.img = createImg(imagePath, "Enemy");
+    this.type = type;
+    this.img;
     this.speed = 3;
+    this.hb;
+  }
+
+  setup() {
+    const enemyType = ENEMIES[this.type];
+    this.img = createImg(enemyType.source, this.type);
+    this.width = enemyType.width;
+    this.height = enemyType.height;
     this.hb = new HitBox(
-      HitBoxFactory.coords(this.x - ENEMY_SPECS.hb, this.y - ENEMY_SPECS.hb),
+      HitBoxFactory.coords(this.x - enemyType.hb, this.y - enemyType.hb),
       HitBoxFactory.squareDims(80, 80)
     );
   }
@@ -20,22 +29,36 @@ class Enemy {
   }
 
   moveLeft() {
-    if (this.hb.x >= 10) {
+    if (this.canMoveLeft()) {
       this.x -= this.speed;
       this.hb.x -= this.speed;
     }
   }
 
   moveRight() {
-    if (this.hb.x <= windowWidth - ENEMY_SPECS.width - 10) {
+    if (this.canMoveRight()) {
       this.x += this.speed;
       this.hb.x += this.speed;
     }
   }
 
+  canMoveRight = () => this.hb.x <= windowWidth - this.width - 10;
+  canMoveLeft = () => this.hb.x >= 10;
+
   move() {
-    // this.moveRight();
+    this[ENEMIES[this.type].move]();
   }
+
+  normalMove() {
+    if (!this.canMoveRight() || !this.canMoveLeft()) {
+      this.speed *= -1;
+    }
+
+    this.x -= this.speed;
+    this.hb.x -= this.speed;
+  }
+
+  teamMove() {}
 
   death() {
     this.img = createImg(

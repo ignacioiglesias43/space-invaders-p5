@@ -3,6 +3,7 @@ class Asteroid {
     this.x = coords.x;
     this.y = coords.y;
     this.img = loadImage("src/assets/sprites/others/asteroid.png");
+    this.imgInstance;
     this.width = ASTEROID_SPECS.width;
     this.height = ASTEROID_SPECS.height;
     this.hb = new HitBox(
@@ -15,7 +16,11 @@ class Asteroid {
   }
 
   draw() {
-    image(this.img, this.x, this.y, this.width, this.height);
+    this.imgInstance = image(this.img, this.x, this.y, this.width, this.height);
+  }
+
+  destroy() {
+    this.imgInstance.remove();
   }
 }
 

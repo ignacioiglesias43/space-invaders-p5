@@ -53,7 +53,7 @@ class Ship {
         ),
         "src/assets/sprites/bullet/player-bullet.gif",
         BULLET_TYPES.PLAYER,
-        sound
+        this.sound
       )
     );
   }
@@ -63,6 +63,7 @@ class Ship {
       "src/assets/sprites/others/explosion.gif",
       "PlayerDeath"
     );
+    // this.img.remove();
   }
 }
 

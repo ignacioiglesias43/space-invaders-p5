@@ -29,6 +29,10 @@ class Bullet {
       this.hb.y += this.speed;
     }
   }
+
+  destroy() {
+    this.img.remove();
+  }
 }
 
 const BulletFactory = {

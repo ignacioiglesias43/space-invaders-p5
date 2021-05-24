@@ -7,39 +7,29 @@ class GameController {
     this.lives = lives;
     this.font = font;
     this.ship = null;
-
-    this.enemies = [];
     this.asteroids = [];
+
+    this.enemies = new EnemyController(
+      EnemyControllerFactory.coords(0, 0),
+      gameState
+    );
   }
 
   setup() {
     this.ship = new Ship(
       ShipFactory.coords(windowWidth / 2, windowHeight - 100),
-      ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW, ENTER)
+      ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW, 32)
     );
-
-    this.fillEnemies();
+    this.enemies.setup();
     this.fillAsteroids();
   }
 
-  fillEnemies() {
-    Array.from(Array(5), (_, k) =>
-      this.enemies.push(
-        new Enemy(
-          EnemyFactory.coords(ENEMY_SPECS.width * (k * 2) + 50, 50),
-          null,
-          "src/assets/sprites/enemies/enemy-medium.gif"
-        )
-      )
-    );
-  }
-
   fillAsteroids() {
-    Array.from(Array(6), (_, k) =>
-      this.enemies.push(
+    Array.from(Array(10), (_, k) =>
+      this.asteroids.push(
         new Asteroid(
           AsteroidFactory.coords(
-            ASTEROID_SPECS.width * (k * 2) + 50,
+            ASTEROID_SPECS.width * (k * 2) + 150,
             windowHeight - (150 + ASTEROID_SPECS.height)
           )
         )
@@ -53,7 +43,8 @@ class GameController {
 
   play() {
     this.ship.draw();
-    this.enemies.forEach((e) => e.draw());
+    this.enemies.draw();
+    this.asteroids.forEach((a) => a.draw());
   }
 
   pause() {
