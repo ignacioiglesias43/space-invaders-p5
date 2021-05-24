@@ -1,7 +1,8 @@
 let backgroundImg;
-let ship;
 let gameFont;
 let bgSoundFile;
+let gameController;
+let gameState;
 
 function preload() {
   backgroundImg = loadImage(
@@ -13,17 +14,21 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  ship = new Ship(
-    ShipFactory.coords(windowWidth / 2, windowHeight - 100),
-    ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW)
+  gameState = GAME_STATES.ON_PLAY;
+  gameController = new GameController(
+    GameFactory.coords(0, 0),
+    gameState,
+    gameFont
   );
-  //   enemy = new Enemy(EnemyFactory.coords(50, 50));
+
+  gameController.setup();
+
   //   bgSoundFile.loop();
 }
 
 function draw() {
   background(backgroundImg);
-  ship.draw();
+  gameController.draw();
   // console.log(key);
   //   enemy.draw();
 }

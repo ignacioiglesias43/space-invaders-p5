@@ -8,6 +8,10 @@ class Ship {
     this.img = createImg("src/assets/sprites/ship/ship.gif", "Player");
     this.controllSettings = controllSettings;
     this.speed = 4;
+    this.hb = new HitBox(
+      HitBoxFactory.coords(this.x, this.y - SHIP_SPECS.hb),
+      HitBoxFactory.squareDims(56, 78)
+    );
   }
 
   draw() {
@@ -17,14 +21,16 @@ class Ship {
   }
 
   moveLeft() {
-    if (this.x >= 10) {
+    if (this.hb.x >= 10) {
       this.x -= this.speed;
+      this.hb.x -= this.speed;
     }
   }
 
   moveRight() {
-    if (this.x <= windowWidth - SHIP_SPECS.width - 10) {
+    if (this.hb.x <= windowWidth - SHIP_SPECS.width - 10) {
       this.x += this.speed;
+      this.hb.x += this.speed;
     }
   }
 
