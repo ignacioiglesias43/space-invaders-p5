@@ -12,12 +12,14 @@ class Ship {
       HitBoxFactory.coords(this.x, this.y - SHIP_SPECS.hb),
       HitBoxFactory.squareDims(56, 78)
     );
+    this.bullets = [];
   }
 
   draw() {
     this.img.position(this.x, this.y);
     this.img.size(this.width, this.height);
     this.move();
+    this.bullets.forEach((b) => b.draw());
   }
 
   moveLeft() {
@@ -42,12 +44,31 @@ class Ship {
     });
   }
 
-  shoot() {}
+  shoot() {
+    this.bullets.push(
+      new Bullet(
+        BulletFactory.coords(
+          this.hb.x + BULLET_SPECS.width / 2,
+          this.hb.y - BULLET_SPECS.height - 20
+        ),
+        "src/assets/sprites/bullet/player-bullet.gif",
+        BULLET_TYPES.PLAYER,
+        sound
+      )
+    );
+  }
+
+  death() {
+    this.img = createImg(
+      "src/assets/sprites/others/explosion.gif",
+      "PlayerDeath"
+    );
+  }
 }
 
 const ShipFactory = {
   coords: (x, y) => ({ x, y }),
-  controllSettings: (moveRightKey, moveLeftKey) => [
+  controllSettings: (moveRightKey, moveLeftKey, shootKey) => [
     {
       name: "moveRight",
       key: moveRightKey,
@@ -55,6 +76,10 @@ const ShipFactory = {
     {
       name: "moveLeft",
       key: moveLeftKey,
+    },
+    {
+      name: "shoot",
+      key: shootKey,
     },
   ],
 };

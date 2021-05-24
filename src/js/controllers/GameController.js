@@ -15,7 +15,7 @@ class GameController {
   setup() {
     this.ship = new Ship(
       ShipFactory.coords(windowWidth / 2, windowHeight - 100),
-      ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW)
+      ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW, ENTER)
     );
 
     this.fillEnemies();

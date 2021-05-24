@@ -36,6 +36,13 @@ class Enemy {
   move() {
     // this.moveRight();
   }
+
+  death() {
+    this.img = createImg(
+      "src/assets/sprites/others/explosion.gif",
+      "EnemyDeath"
+    );
+  }
 }
 
 const EnemyFactory = {
