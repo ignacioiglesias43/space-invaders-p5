@@ -1,5 +1,5 @@
 class GameController {
-  constructor(coords, gameState, font, points = 0, lives = 3) {
+  constructor(coords, gameState, font, sounds, points = 0, lives = 3) {
     this.x = coords.x;
     this.y = coords.y;
     this.gameState = gameState;
@@ -8,18 +8,22 @@ class GameController {
     this.font = font;
     this.ship = null;
     this.asteroids = [];
+    this.sounds = sounds;
 
     this.enemies = new EnemyController(
       EnemyControllerFactory.coords(0, 0),
-      gameState
+      this.gameState,
+      [sounds.enemiesShootSound, sounds.enemyHitSound]
+    );
+    this.ship = new PlayerController(
+      PlayerFactory.coords(0, 0),
+      this.gameState,
+      [sounds.playerShootSound, sounds.playerHitSound]
     );
   }
 
   setup() {
-    this.ship = new Ship(
-      ShipFactory.coords(windowWidth / 2, windowHeight - 100),
-      ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW, 32)
-    );
+    this.ship.setup();
     this.enemies.setup();
     this.fillAsteroids();
   }

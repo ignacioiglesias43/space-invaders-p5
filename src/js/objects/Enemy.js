@@ -1,10 +1,10 @@
 class Enemy {
-  constructor(coords, sound, type) {
+  constructor(coords, sounds, type) {
     this.x = coords.x;
     this.y = coords.y;
     this.width = 0;
     this.height = 0;
-    this.sound = sound;
+    this.sounds = sounds;
     this.type = type;
     this.img;
     this.speed = 3;
@@ -50,10 +50,12 @@ class Enemy {
           this.hb.y + this.height + 20
         ),
         "src/assets/sprites/bullet/enemy-bullet.gif",
-        BULLET_TYPES.ENEMY,
-        this.sound
+        BULLET_TYPES.ENEMY
       )
     );
+    const index = ENEMY_TYPES.indexOf(this.type);
+    this.sounds[0][index].play();
+    this.sounds[0][index].setVolume(0.3);
   }
 
   death() {

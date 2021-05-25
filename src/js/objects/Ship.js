@@ -1,10 +1,10 @@
 class Ship {
-  constructor(coords, controllSettings, sound) {
+  constructor(coords, controllSettings, sounds) {
     this.x = coords.x;
     this.y = coords.y;
     this.width = SHIP_SPECS.width;
     this.height = SHIP_SPECS.height;
-    this.sound = sound;
+    this.sounds = sounds;
     this.img = createImg("src/assets/sprites/ship/ship.gif", "Player");
     this.controllSettings = controllSettings;
     this.speed = 4;
@@ -52,10 +52,11 @@ class Ship {
           this.hb.y - BULLETS.player.height - 20
         ),
         "src/assets/sprites/bullet/player-bullet.gif",
-        BULLET_TYPES.PLAYER,
-        this.sound
+        BULLET_TYPES.PLAYER
       )
     );
+    this.sounds[0].play();
+    this.sounds[0].setVolume(0.3);
   }
 
   death() {

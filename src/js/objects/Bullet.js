@@ -1,12 +1,11 @@
 class Bullet {
-  constructor(coords, imagePath, type, sound) {
+  constructor(coords, imagePath, type) {
     this.x = coords.x;
     this.y = coords.y;
     this.img = createImg(imagePath, "Bullet");
     this.type = type;
     this.width = BULLETS[type].width;
     this.height = BULLETS[type].height;
-    this.sound = sound;
     this.hb = new HitBox(
       HitBoxFactory.coords(
         this.x - BULLETS[type].hb,
