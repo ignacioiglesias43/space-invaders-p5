@@ -4,35 +4,52 @@ class EnemyController {
     this.y = coords.y;
     this.gameState = gameState;
     this.general;
-    this.captains = [];
-    this.privates = [];
+    this.captain = [];
+    this.private = [];
+    this.initialFireRate = 60;
+    this.fireRate = this.initialFireRate;
   }
 
   setup() {
     this.fillEnemies();
     this.general.setup();
-    this.captains.forEach((e) => e.setup());
-    this.privates.forEach((e) => e.setup());
+    this.captain.forEach((e) => e.setup());
+    this.private.forEach((e) => e.setup());
   }
 
   draw() {
-    if (this.borderReached(this.captains)) {
-      this.captains.forEach((e) => e.reverseX());
+    if (this.borderReached(this.captain)) {
+      this.captain.forEach((e) => e.reverseX());
     }
-    if (this.borderReached(this.privates)) {
-      this.privates.forEach((e) => e.reverseX());
+    if (this.borderReached(this.private)) {
+      this.private.forEach((e) => e.reverseX());
     }
 
     if (!this.general.canMoveRight() || !this.general.canMoveLeft()) {
       this.general.reverseX();
     }
-    this.captains.forEach((e) => e.draw());
-    this.privates.forEach((e) => e.draw());
+    this.captain.forEach((e) => e.draw());
+    this.private.forEach((e) => e.draw());
     this.general.draw();
+    this.shoot();
   }
 
   borderReached = (enemies) =>
     enemies.some((e) => !e.canMoveRight() || !e.canMoveLeft());
+
+  shoot() {
+    if (frameCount % this.fireRate === 0) {
+      const chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
+      if (chosen === 0) {
+        this[ENEMY_TYPES[chosen].toLowerCase()].shoot();
+      } else {
+        const selected = Math.floor(
+          Math.random() * this[ENEMY_TYPES[chosen].toLowerCase()].length
+        );
+        this[ENEMY_TYPES[chosen].toLowerCase()][selected].shoot();
+      }
+    }
+  }
 
   fillEnemies() {
     this.general = new Enemy(
@@ -43,7 +60,7 @@ class EnemyController {
       this.mapHBRight
     );
     Array.from(Array(6), (_, k) =>
-      this.captains.push(
+      this.captain.push(
         new Enemy(
           EnemyFactory.coords(70 * (k * 2) + 50, 125),
           null,
@@ -56,7 +73,7 @@ class EnemyController {
 
     for (let i = 0; i < 7; i++) {
       for (let j = 0; j < 4; j++) {
-        this.privates.push(
+        this.private.push(
           new Enemy(
             EnemyFactory.coords(70 * ((i + 1) * 2) + 50, 200 + (j + 1) * 100),
             null,

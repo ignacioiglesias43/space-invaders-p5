@@ -27,6 +27,7 @@ class Enemy {
     this.img.position(this.x, this.y);
     this.img.size(this.width, this.height);
     this.move();
+    this.bullets.forEach((b) => b.draw());
   }
 
   canMoveRight = () => this.hb.x <= windowWidth - this.width - 10;
@@ -48,7 +49,7 @@ class Enemy {
           this.hb.x + BULLET_SPECS.width / 2,
           this.hb.y - BULLET_SPECS.height - 20
         ),
-        "src/assets/sprites/bullet/player-bullet.gif",
+        "src/assets/sprites/bullet/enemy-bullet.gif",
         BULLET_TYPES.ENEMY,
         this.sound
       )
