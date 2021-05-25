@@ -9,6 +9,7 @@ class Enemy {
     this.img;
     this.speed = 3;
     this.hb;
+    this.bullets = [];
   }
 
   setup() {
@@ -28,37 +29,31 @@ class Enemy {
     this.move();
   }
 
-  moveLeft() {
-    if (this.canMoveLeft()) {
-      this.x -= this.speed;
-      this.hb.x -= this.speed;
-    }
-  }
-
-  moveRight() {
-    if (this.canMoveRight()) {
-      this.x += this.speed;
-      this.hb.x += this.speed;
-    }
-  }
-
   canMoveRight = () => this.hb.x <= windowWidth - this.width - 10;
   canMoveLeft = () => this.hb.x >= 10;
 
-  move() {
-    this[ENEMIES[this.type].move]();
+  reverseX() {
+    this.speed *= -1;
   }
 
-  normalMove() {
-    if (!this.canMoveRight() || !this.canMoveLeft()) {
-      this.speed *= -1;
-    }
-
+  move() {
     this.x -= this.speed;
     this.hb.x -= this.speed;
   }
 
-  teamMove() {}
+  shoot() {
+    this.bullets.push(
+      new Bullet(
+        BulletFactory.coords(
+          this.hb.x + BULLET_SPECS.width / 2,
+          this.hb.y - BULLET_SPECS.height - 20
+        ),
+        "src/assets/sprites/bullet/player-bullet.gif",
+        BULLET_TYPES.ENEMY,
+        this.sound
+      )
+    );
+  }
 
   death() {
     this.img = createImg(

@@ -19,21 +19,18 @@ const ENEMIES = {
     height: 90,
     hb: 4,
     source: "src/assets/sprites/enemies/enemy-big.gif",
-    move: "normalMove",
   },
   CAPTAIN: {
     width: 70,
     height: 70,
     hb: 4,
     source: "src/assets/sprites/enemies/enemy-medium.gif",
-    move: "teamMove",
   },
   PRIVATE: {
     width: 50,
     height: 50,
     hb: 4,
     source: "src/assets/sprites/enemies/enemy-small.gif",
-    move: "teamMove",
   },
 };
 
