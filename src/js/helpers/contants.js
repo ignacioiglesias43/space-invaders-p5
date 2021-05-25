@@ -1,7 +1,19 @@
 const SHIP_SPECS = { width: 54, height: 72, hb: 4 };
 
 const ASTEROID_SPECS = { width: 80, height: 80, hb: 0.5 };
-const BULLET_SPECS = { width: 21, height: 45, hb: 1 };
+
+const BULLETS = {
+  enemy: {
+    width: 28,
+    height: 28,
+    hb: 4,
+  },
+  player: {
+    width: 21,
+    height: 45,
+    hb: 1,
+  },
+};
 
 const GAME_STATES = {
   PAUSED: "pause",
@@ -17,7 +29,7 @@ const ENEMIES = {
   GENERAL: {
     width: 90,
     height: 90,
-    hb: 4,
+    hb: 0.5,
     source: "src/assets/sprites/enemies/enemy-big.gif",
   },
   CAPTAIN: {
@@ -29,7 +41,7 @@ const ENEMIES = {
   PRIVATE: {
     width: 50,
     height: 50,
-    hb: 4,
+    hb: 6,
     source: "src/assets/sprites/enemies/enemy-small.gif",
   },
 };

@@ -31,6 +31,7 @@ class EnemyController {
     this.captain.forEach((e) => e.draw());
     this.private.forEach((e) => e.draw());
     this.general.draw();
+
     this.shoot();
   }
 

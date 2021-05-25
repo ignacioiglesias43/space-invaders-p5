@@ -3,13 +3,16 @@ class Bullet {
     this.x = coords.x;
     this.y = coords.y;
     this.img = createImg(imagePath, "Bullet");
-    this.width = BULLET_SPECS.width;
-    this.height = BULLET_SPECS.height;
     this.type = type;
+    this.width = BULLETS[type].width;
+    this.height = BULLETS[type].height;
     this.sound = sound;
     this.hb = new HitBox(
-      HitBoxFactory.coords(this.x - BULLET_SPECS.hb, this.y - BULLET_SPECS.hb),
-      HitBoxFactory.squareDims(27, 50)
+      HitBoxFactory.coords(
+        this.x - BULLETS[type].hb,
+        this.y - BULLETS[type].hb
+      ),
+      HitBoxFactory.squareDims(this.width + 5, this.height + 5)
     );
     this.speed = 3;
   }

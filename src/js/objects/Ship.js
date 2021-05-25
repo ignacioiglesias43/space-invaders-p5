@@ -48,8 +48,8 @@ class Ship {
     this.bullets.push(
       new Bullet(
         BulletFactory.coords(
-          this.hb.x + BULLET_SPECS.width / 2,
-          this.hb.y - BULLET_SPECS.height - 20
+          this.hb.x + this.width / 2 - BULLETS.player.width / 2,
+          this.hb.y - BULLETS.player.height - 20
         ),
         "src/assets/sprites/bullet/player-bullet.gif",
         BULLET_TYPES.PLAYER,
