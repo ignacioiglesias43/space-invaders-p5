@@ -6,6 +6,7 @@ class PlayerController {
     this.sounds = sounds;
     this.bullets = bullets;
     this.ship;
+    this.pointsCallback = () => {};
   }
 
   setup() {
@@ -17,6 +18,7 @@ class PlayerController {
       this.bullets.enemyBullet
     );
     this.ship.setup(enemiesController);
+    this.ship.pointsCallback = this.pointsCallback;
   }
 
   draw() {

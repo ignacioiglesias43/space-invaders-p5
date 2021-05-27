@@ -16,6 +16,7 @@ class GameController {
     this.ship = controllers.playerController;
     this.enemies = controllers.enemiesController;
     this.enemies.takeLifeCallback = this.takeLife;
+    this.ship.pointsCallback = this.pointsPlusPlus;
   }
 
   setup() {
@@ -26,13 +27,15 @@ class GameController {
     textSize(30);
   }
 
+  pointsPlusPlus = (point) => (this.points += point);
+
   takeLife = () => {
     this.lives--;
     const element = this.printLives.pop();
     element.remove();
-    if (this.lives === 0) {
+    /* if (this.lives === 0) {
       this.gameState = GAME_STATES.GAME_OVER;
-    }
+    } */
   };
 
   gameOver() {
@@ -72,10 +75,10 @@ class GameController {
       life.position(this.x + 410 + SHIP_SPECS.width * index, this.y + 20);
       life.size(SHIP_SPECS.width - 20, SHIP_SPECS.height - 20);
     });
-    if (this.lives === 0) {
+    /* if (this.lives === 0) {
       this.gameState = GAME_STATES.GAME_OVER;
       this.gameOver();
-    }
+    } */
   }
 
   pause() {

@@ -16,6 +16,7 @@ class Ship {
     this.enemyBullet = enemyBullet;
     this.enemiesController;
     this.wasHitSound = sounds[1];
+    this.pointsCallback = () => {};
   }
 
   setup(enemiesController) {
@@ -73,6 +74,7 @@ class Ship {
       this.bullet.reset();
       this.enemiesController.general.wasHit();
       this.enemiesController.general.death();
+      this.pointsCallback(ENEMIES[this.enemiesController.general.type].points);
     }
 
     this.enemiesController.captain.forEach((e, index) => {
@@ -81,6 +83,7 @@ class Ship {
         e.wasHit();
         e.death();
         this.enemiesController.captain.splice(index, 1);
+        this.pointsCallback(ENEMIES[e.type].points);
       }
     });
 
@@ -89,7 +92,9 @@ class Ship {
         this.bullet.reset();
         e.wasHit();
         e.death();
+
         this.enemiesController.private.splice(index, 1);
+        this.pointsCallback(ENEMIES[e.type].points);
       }
     });
   };

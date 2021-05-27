@@ -32,6 +32,7 @@ const ENEMIES = {
     height: 90,
     hb: 0.5,
     source: "src/assets/sprites/enemies/enemy-big.gif",
+    points: 100,
   },
   CAPTAIN: {
     width: 70,
@@ -39,6 +40,7 @@ const ENEMIES = {
     hb: 4,
     source: "src/assets/sprites/enemies/enemy-medium.gif",
     length: 6,
+    points: 50,
   },
   PRIVATE: {
     width: 50,
@@ -48,6 +50,7 @@ const ENEMIES = {
     row: 7,
     column: 4,
     length: 28,
+    points: 20,
   },
 };
 
