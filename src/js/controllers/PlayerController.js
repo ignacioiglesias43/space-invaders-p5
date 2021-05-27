@@ -10,7 +10,7 @@ class PlayerController {
 
   setup() {
     this.ship = new Ship(
-      ShipFactory.coords(windowWidth / 2, windowHeight - 100),
+      ShipFactory.coords(windowWidth / 2, windowHeight - 90),
       ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW, 32),
       this.sounds,
       this.bullets.playerBullet,

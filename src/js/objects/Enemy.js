@@ -13,6 +13,7 @@ class Enemy {
     this.playerBullet = playerBullet;
     this.playerController;
     this.wasHitSound = sounds[1];
+    this.takeLifeCallback = () => {};
   }
 
   setup(playerController) {
@@ -70,7 +71,7 @@ class Enemy {
       this.bullet.reset();
       // this.playerController.ship.death();
       this.playerController.ship.wasHit();
-      console.log("life --");
+      this.takeLifeCallback();
     }
   };
 

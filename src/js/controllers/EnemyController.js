@@ -10,13 +10,21 @@ class EnemyController {
     this.initialFireRate = 60;
     this.fireRate = this.initialFireRate;
     this.bullets = bullets;
+    this.takeLifeCallback = () => {};
   }
 
   setup(playerController) {
     this.fillEnemies();
     this.general.setup(playerController);
-    this.captain.forEach((e) => e.setup(playerController));
-    this.private.forEach((e) => e.setup(playerController));
+    this.general.takeLifeCallback = this.takeLifeCallback;
+    this.captain.forEach((e) => {
+      e.setup(playerController);
+      e.takeLifeCallback = this.takeLifeCallback;
+    });
+    this.private.forEach((e) => {
+      e.setup(playerController);
+      e.takeLifeCallback = this.takeLifeCallback;
+    });
   }
 
   draw() {
@@ -66,7 +74,7 @@ class EnemyController {
 
   fillEnemies() {
     this.general = new Enemy(
-      EnemyFactory.coords(windowWidth / 2, 15),
+      EnemyFactory.coords(windowWidth / 2, 65),
       this.sounds,
       ENEMY_TYPES[0],
       this.bullets.enemyBullet,
@@ -75,7 +83,7 @@ class EnemyController {
     Array.from(Array(6), (_, k) =>
       this.captain.push(
         new Enemy(
-          EnemyFactory.coords(70 * (k * 2) + 50, 125),
+          EnemyFactory.coords(70 * (k * 2) + 50, 195),
           this.sounds,
           ENEMY_TYPES[1],
           this.bullets.enemyBullet,
@@ -88,7 +96,7 @@ class EnemyController {
       for (let j = 0; j < 4; j++) {
         this.private.push(
           new Enemy(
-            EnemyFactory.coords(70 * ((i + 1) * 2) + 50, 200 + (j + 1) * 100),
+            EnemyFactory.coords(70 * ((i + 1) * 2) + 50, 250 + (j + 1) * 100),
             this.sounds,
             ENEMY_TYPES[2],
             this.bullets.enemyBullet,

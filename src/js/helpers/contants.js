@@ -18,6 +18,7 @@ const BULLETS = {
 const GAME_STATES = {
   PAUSED: "pause",
   ON_PLAY: "play",
+  GAME_OVER: "gameOver",
 };
 
 const BULLET_TYPES = {
