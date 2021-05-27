@@ -9,14 +9,14 @@ class Enemy {
     this.img;
     this.speed = 3;
     this.hb;
-    const index = ENEMY_TYPES.indexOf(this.type);
     this.bullet = bullet;
     this.playerBullet = playerBullet;
-    this.bullet.sound = this.sounds[0][index];
+    this.playerController;
   }
 
-  setup() {
+  setup(playerController) {
     const enemyType = ENEMIES[this.type];
+    const index = ENEMY_TYPES.indexOf(this.type);
     this.img = createImg(enemyType.source, this.type);
     this.width = enemyType.width;
     this.height = enemyType.height;
@@ -24,6 +24,8 @@ class Enemy {
       HitBoxFactory.coords(this.x - enemyType.hb, this.y - enemyType.hb),
       HitBoxFactory.squareDims(enemyType.width + 10, enemyType.height + 10)
     );
+    this.bullet.sound = this.sounds[0][index];
+    this.playerController = playerController;
   }
 
   draw() {
@@ -31,6 +33,9 @@ class Enemy {
     this.img.size(this.width, this.height);
     this.move();
     this.bullet.draw();
+    if (this.bullet.canShoot) {
+      this.bulletShotEnemy();
+    }
   }
 
   canMoveRight = () => this.hb.x <= windowWidth - this.width - 10;
@@ -54,11 +59,18 @@ class Enemy {
     );
   }
 
+  bulletShotEnemy = () => {
+    if (this.bulletSuccess(this.playerController.ship.hb)) {
+      this.bullet.reset();
+      // this.playerController.ship.death();
+      console.log("life --");
+    }
+  };
+
+  bulletSuccess = (hb) => this.bullet.hb.wasHitSquare(hb);
+
   death() {
-    this.img = createImg(
-      "src/assets/sprites/others/explosion.gif",
-      "EnemyDeath"
-    );
+    this.img.remove();
   }
 }
 

@@ -5,6 +5,7 @@ class PlayerController {
     this.gameState = gameState;
     this.sounds = sounds;
     this.bullets = bullets;
+    this.ship;
   }
 
   setup() {
@@ -15,6 +16,7 @@ class PlayerController {
       this.bullets.playerBullet,
       this.bullets.enemyBullet
     );
+    this.ship.setup(enemiesController);
   }
 
   draw() {

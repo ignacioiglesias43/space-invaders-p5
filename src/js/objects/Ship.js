@@ -14,6 +14,11 @@ class Ship {
     );
     this.bullet = bullet;
     this.enemyBullet = enemyBullet;
+    this.enemiesController;
+  }
+
+  setup(enemiesController) {
+    this.enemiesController = enemiesController;
   }
 
   draw() {
@@ -21,6 +26,9 @@ class Ship {
     this.img.size(this.width, this.height);
     this.move();
     this.bullet.draw();
+    if (this.bullet.canShoot) {
+      this.bulletShotEnemy();
+    }
   }
 
   moveLeft() {
@@ -53,6 +61,31 @@ class Ship {
       )
     );
   }
+
+  bulletShotEnemy = () => {
+    if (this.bulletSuccess(this.enemiesController.general.hb)) {
+      this.bullet.reset();
+      this.enemiesController.general.death();
+    }
+
+    this.enemiesController.captain.forEach((e, index) => {
+      if (this.bulletSuccess(e.hb)) {
+        this.bullet.reset();
+        e.death();
+        this.enemiesController.captain.splice(index, 1);
+      }
+    });
+
+    this.enemiesController.private.forEach((e, index) => {
+      if (this.bulletSuccess(e.hb)) {
+        this.bullet.reset();
+        e.death();
+        this.enemiesController.private.splice(index, 1);
+      }
+    });
+  };
+
+  bulletSuccess = (hb) => this.bullet.hb.wasHitSquare(hb);
 
   death() {
     this.img = createImg(

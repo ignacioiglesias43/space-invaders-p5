@@ -12,11 +12,11 @@ class EnemyController {
     this.bullets = bullets;
   }
 
-  setup() {
+  setup(playerController) {
     this.fillEnemies();
-    this.general.setup();
-    this.captain.forEach((e) => e.setup());
-    this.private.forEach((e) => e.setup());
+    this.general.setup(playerController);
+    this.captain.forEach((e) => e.setup(playerController));
+    this.private.forEach((e) => e.setup(playerController));
   }
 
   draw() {
@@ -27,12 +27,18 @@ class EnemyController {
       this.private.forEach((e) => e.reverseX());
     }
 
-    if (!this.general.canMoveRight() || !this.general.canMoveLeft()) {
+    if (
+      this.general !== null &&
+      (!this.general.canMoveRight() || !this.general.canMoveLeft())
+    ) {
       this.general.reverseX();
     }
+
     this.captain.forEach((e) => e.draw());
     this.private.forEach((e) => e.draw());
-    this.general.draw();
+    if (this.general !== null) {
+      this.general.draw();
+    }
 
     this.shoot();
   }
@@ -43,7 +49,9 @@ class EnemyController {
   shoot() {
     if (frameCount % this.fireRate === 0) {
       if (!this.bullets.enemyBullet.canShoot) {
-        const chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
+        let chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
+        if (chosen === 0 && this.general === null)
+          chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
         if (chosen === 0) {
           this[ENEMY_TYPES[chosen].toLowerCase()].shoot();
         } else {

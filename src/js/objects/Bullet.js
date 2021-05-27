@@ -3,6 +3,7 @@ class Bullet {
     this.x = 0;
     this.y = 0;
     this.img = createImg(imagePath, "Bullet");
+    this.path = imagePath;
     this.type = type;
     this.width = BULLETS[type].width;
     this.height = BULLETS[type].height;
@@ -22,6 +23,7 @@ class Bullet {
   shoot(coords) {
     if (!this.canShoot) {
       this.canShoot = true;
+      this.img = createImg(this.path, "Bullet");
       this.x = coords.x;
       this.hb.x = coords.x;
       this.y = coords.y;
@@ -55,8 +57,7 @@ class Bullet {
 
   reset() {
     this.canShoot = false;
-    this.y = -100;
-    this.hb.y = -100;
+    this.img.remove();
   }
 
   borderReached = () => this.hb.y < -100 || this.hb.y > windowHeight;
