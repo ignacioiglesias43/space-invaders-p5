@@ -14,6 +14,7 @@ class Enemy {
     this.playerController;
     this.wasHitSound = sounds[1];
     this.takeLifeCallback = () => {};
+    this.isDead = false;
   }
 
   setup(playerController) {
@@ -28,6 +29,7 @@ class Enemy {
     );
     this.bullet.sound = this.sounds[0][index];
     this.playerController = playerController;
+    this.isDead = false;
   }
 
   wasHit = () => {
@@ -69,7 +71,6 @@ class Enemy {
   bulletShotEnemy = () => {
     if (this.bulletSuccess(this.playerController.ship.hb)) {
       this.bullet.reset();
-      // this.playerController.ship.death();
       this.playerController.ship.wasHit();
       this.takeLifeCallback();
     }
@@ -79,6 +80,7 @@ class Enemy {
 
   death() {
     this.img.remove();
+    this.isDead = true;
   }
 }
 

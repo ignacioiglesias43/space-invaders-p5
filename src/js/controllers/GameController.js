@@ -1,18 +1,23 @@
 class GameController {
-  constructor(coords, gameState, font, controllers, points = 0, lives = 3) {
+  constructor(
+    coords,
+    gameState,
+    font,
+    controllers,
+    gameOverSound,
+    points = 0,
+    lives = 3
+  ) {
     this.x = coords.x;
     this.y = coords.y;
     this.gameState = gameState;
+    this.gameOverSound = gameOverSound;
     this.points = points;
     this.lives = lives;
-    this.printLives = [
-      createImg("src/assets/sprites/ship/ship.gif", "life"),
-      createImg("src/assets/sprites/ship/ship.gif", "life"),
-      createImg("src/assets/sprites/ship/ship.gif", "life"),
-    ];
+    this.printLives = [];
     this.font = font;
     this.ship = null;
-    this.asteroids = [];
+    this.asteroids = controllers.asteroidController;
     this.ship = controllers.playerController;
     this.enemies = controllers.enemiesController;
     this.enemies.takeLifeCallback = this.takeLife;
@@ -25,7 +30,13 @@ class GameController {
   setup() {
     this.ship.setup(this.enemies);
     this.enemies.setup(this.ship);
-    this.fillAsteroids();
+    this.ship.wonCallback = () => (this.gameState = GAME_STATES.WIN);
+    this.asteroids.setup();
+    Array.from(Array(this.lives), () =>
+      this.printLives.push(
+        createImg("src/assets/sprites/ship/ship.gif", "life")
+      )
+    );
     textFont(this.font);
   }
 
@@ -37,47 +48,64 @@ class GameController {
     element.remove();
     if (this.lives === 0) {
       this.gameState = GAME_STATES.GAME_OVER;
+      this.enemies.gameOver();
+      this.ship.ship.death();
+      this.gameOverSound.play();
+      this.gameOverSound.setVolume(0.1);
     }
   };
 
   gameOver() {
-    push();
     this.printLives.forEach((life) => life.remove());
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(50);
     push();
     fill(0);
-    text("GAME OVER", windowWidth / 2, 73);
+    text("GAME OVER", windowWidth / 2, windowHeight / 2 + 3);
     pop();
-    text("GAME OVER", windowWidth / 2, 70);
+    text("GAME OVER", windowWidth / 2, windowHeight / 2);
     push();
     fill(0);
-    text(`Score: ${this.points}`, windowWidth / 2, 143);
+    text(`Score: ${this.points}`, windowWidth / 2, windowHeight / 2 + 73);
     pop();
-    text(`Score: ${this.points}`, windowWidth / 2, 140);
+    text(`Score: ${this.points}`, windowWidth / 2, windowHeight / 2 + 70);
     push();
     fill(0);
-    text("PRESS ENTER TO PLAY AGAIN", windowWidth / 2, 203);
+    text("PRESS ENTER TO PLAY AGAIN", windowWidth / 2, windowHeight / 2 + 136);
     pop();
-    text("PRESS ENTER TO PLAY AGAIN", windowWidth / 2, 200);
+    text("PRESS ENTER TO PLAY AGAIN", windowWidth / 2, windowHeight / 2 + 133);
 
     if (keyIsDown(ENTER)) {
       this.reset();
     }
   }
 
-  fillAsteroids() {
-    Array.from(Array(10), (_, k) =>
-      this.asteroids.push(
-        new Asteroid(
-          AsteroidFactory.coords(
-            ASTEROID_SPECS.width * (k * 2) + 150,
-            windowHeight - (125 + ASTEROID_SPECS.height)
-          )
-        )
-      )
-    );
+  win() {
+    this.printLives.forEach((life) => life.remove());
+    this.ship.ship.death();
+    fill(255);
+    textAlign(CENTER, CENTER);
+    textSize(50);
+    push();
+    fill(0);
+    text("YOU WON", windowWidth / 2, windowHeight / 2 + 3);
+    pop();
+    text("YOU WON", windowWidth / 2, windowHeight / 2);
+    push();
+    fill(0);
+    text(`Score: ${this.points}`, windowWidth / 2, windowHeight / 2 + 73);
+    pop();
+    text(`Score: ${this.points}`, windowWidth / 2, windowHeight / 2 + 70);
+    push();
+    fill(0);
+    text("PRESS ENTER TO PLAY AGAIN", windowWidth / 2, windowHeight / 2 + 136);
+    pop();
+    text("PRESS ENTER TO PLAY AGAIN", windowWidth / 2, windowHeight / 2 + 133);
+
+    if (keyIsDown(ENTER)) {
+      this.reset();
+    }
   }
 
   draw() {
@@ -87,8 +115,8 @@ class GameController {
       this.gameOver();
     } else if (this.gameState === GAME_STATES.MENU) {
       this.menu();
-    } else {
-      this.pause();
+    } else if (this.gameState === GAME_STATES.WIN) {
+      this.win();
     }
   }
 
@@ -132,22 +160,22 @@ class GameController {
     text("CONTROLLS", windowWidth / 2, windowHeight / 2 - 300);
 
     if (keyIsDown(ENTER)) {
+      this.logo.remove();
       this.gameState = GAME_STATES.ON_PLAY;
     }
   }
 
   play() {
-    push();
     this.ship.draw();
     this.enemies.draw();
-    this.asteroids.forEach((a) => a.draw());
+    this.asteroids.draw();
     textSize(30);
     push();
     fill(0);
-    text(`Score: ${this.points}`, this.x + 20, this.y + 52);
+    text(`Score: ${this.points}`, windowWidth / 2, this.y + 52);
     pop();
     fill(255);
-    text(`Score: ${this.points}`, this.x + 20, this.y + 50);
+    text(`Score: ${this.points}`, windowWidth / 2, this.y + 50);
     push();
     fill(0);
     text("Health: ", this.x + 270, this.y + 52);
@@ -157,18 +185,25 @@ class GameController {
       life.position(this.x + 410 + SHIP_SPECS.width * index, this.y + 20);
       life.size(SHIP_SPECS.width - 20, SHIP_SPECS.height - 20);
     });
-    pop();
+    if (this.enemies.warriors.length === 0) {
+      this.gameState = GAME_STATES.WIN;
+    }
   }
 
-  pause() {
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(50);
-    text(`Score: ${this.points}`, this.x + 200, this.y + 200);
-    text("Health: ", this.x + windowWidth - 180, this.y);
+  reset() {
+    this.ship.setup(this.enemies);
+    this.enemies.setup(this.ship);
+    this.asteroids.setup();
+    this.lives = 3;
+    this.points = 0;
+    this.printLives = [];
+    Array.from(Array(this.lives), () =>
+      this.printLives.push(
+        createImg("src/assets/sprites/ship/ship.gif", "life")
+      )
+    );
+    this.gameState = GAME_STATES.ON_PLAY;
   }
-
-  reset() {}
 }
 
 const GameFactory = {

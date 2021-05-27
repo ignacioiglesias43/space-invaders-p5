@@ -1,5 +1,12 @@
 class Ship {
-  constructor(coords, controllSettings, sounds, bullet, enemyBullet) {
+  constructor(
+    coords,
+    controllSettings,
+    sounds,
+    bullet,
+    enemyBullet,
+    gameState
+  ) {
     this.x = coords.x;
     this.y = coords.y;
     this.width = SHIP_SPECS.width;
@@ -17,6 +24,8 @@ class Ship {
     this.enemiesController;
     this.wasHitSound = sounds[1];
     this.pointsCallback = () => {};
+    this.wonCallback = () => {};
+    this.gameState = gameState;
   }
 
   setup(enemiesController) {
@@ -70,30 +79,13 @@ class Ship {
   }
 
   bulletShotEnemy = () => {
-    if (this.bulletSuccess(this.enemiesController.general.hb)) {
-      this.bullet.reset();
-      this.enemiesController.general.wasHit();
-      this.enemiesController.general.death();
-      this.pointsCallback(ENEMIES[this.enemiesController.general.type].points);
-    }
-
-    this.enemiesController.captain.forEach((e, index) => {
-      if (this.bulletSuccess(e.hb)) {
-        this.bullet.reset();
-        e.wasHit();
-        e.death();
-        this.enemiesController.captain.splice(index, 1);
-        this.pointsCallback(ENEMIES[e.type].points);
-      }
-    });
-
-    this.enemiesController.private.forEach((e, index) => {
+    this.enemiesController.warriors.forEach((e, index) => {
       if (this.bulletSuccess(e.hb)) {
         this.bullet.reset();
         e.wasHit();
         e.death();
 
-        this.enemiesController.private.splice(index, 1);
+        this.enemiesController.warriors.splice(index, 1);
         this.pointsCallback(ENEMIES[e.type].points);
       }
     });
@@ -102,11 +94,7 @@ class Ship {
   bulletSuccess = (hb) => this.bullet.hb.wasHitSquare(hb);
 
   death() {
-    this.img = createImg(
-      "src/assets/sprites/others/explosion.gif",
-      "PlayerDeath"
-    );
-    // this.img.remove();
+    this.img.remove();
   }
 }
 

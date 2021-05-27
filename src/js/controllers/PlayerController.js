@@ -18,7 +18,8 @@ class PlayerController {
       ShipFactory.controllSettings(RIGHT_ARROW, LEFT_ARROW, 32),
       this.sounds,
       this.bullets.playerBullet,
-      this.bullets.enemyBullet
+      this.bullets.enemyBullet,
+      this.gameState
     );
     this.ship.setup(enemiesController);
     this.ship.pointsCallback = this.pointsCallback;

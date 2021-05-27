@@ -4,9 +4,7 @@ class EnemyController {
     this.y = coords.y;
     this.gameState = gameState;
     this.sounds = sounds;
-    this.general;
-    this.captain = [];
-    this.private = [];
+    this.warriors = [];
     this.initialFireRate = 60;
     this.fireRate = this.initialFireRate;
     this.bullets = bullets;
@@ -14,40 +12,23 @@ class EnemyController {
   }
 
   setup(playerController) {
+    this.warriors = [];
     this.fillEnemies();
-    this.general.setup(playerController);
-    this.general.takeLifeCallback = this.takeLifeCallback;
-    this.captain.forEach((e) => {
-      e.setup(playerController);
-      e.takeLifeCallback = this.takeLifeCallback;
-    });
-    this.private.forEach((e) => {
+    this.warriors.forEach((e) => {
       e.setup(playerController);
       e.takeLifeCallback = this.takeLifeCallback;
     });
   }
 
+  gameOver = () => {
+    this.warriors.forEach((e) => e.death());
+  };
+
   draw() {
-    if (this.borderReached(this.captain)) {
-      this.captain.forEach((e) => e.reverseX());
+    if (this.borderReached(this.warriors)) {
+      this.warriors.forEach((e) => e.reverseX());
     }
-    if (this.borderReached(this.private)) {
-      this.private.forEach((e) => e.reverseX());
-    }
-
-    if (
-      this.general !== null &&
-      (!this.general.canMoveRight() || !this.general.canMoveLeft())
-    ) {
-      this.general.reverseX();
-    }
-
-    this.captain.forEach((e) => e.draw());
-    this.private.forEach((e) => e.draw());
-    if (this.general !== null) {
-      this.general.draw();
-    }
-
+    this.warriors.forEach((e) => e.draw());
     this.shoot();
   }
 
@@ -57,31 +38,24 @@ class EnemyController {
   shoot() {
     if (frameCount % this.fireRate === 0) {
       if (!this.bullets.enemyBullet.canShoot) {
-        let chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
-        if (chosen === 0 && this.general === null)
-          chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
-        if (chosen === 0) {
-          this[ENEMY_TYPES[chosen].toLowerCase()].shoot();
-        } else {
-          const selected = Math.floor(
-            Math.random() * this[ENEMY_TYPES[chosen].toLowerCase()].length
-          );
-          this[ENEMY_TYPES[chosen].toLowerCase()][selected].shoot();
-        }
+        let chosen = Math.floor(Math.random() * this.warriors.length);
+        this.warriors[chosen].shoot();
       }
     }
   }
 
   fillEnemies() {
-    this.general = new Enemy(
-      EnemyFactory.coords(windowWidth / 2 - ENEMIES.GENERAL.width / 2, 65),
-      this.sounds,
-      ENEMY_TYPES[0],
-      this.bullets.enemyBullet,
-      this.bullets.playerBullet
+    this.warriors.push(
+      new Enemy(
+        EnemyFactory.coords(windowWidth / 2 - ENEMIES.GENERAL.width / 2, 65),
+        this.sounds,
+        ENEMY_TYPES[0],
+        this.bullets.enemyBullet,
+        this.bullets.playerBullet
+      )
     );
     Array.from(Array(6), (_, k) =>
-      this.captain.push(
+      this.warriors.push(
         new Enemy(
           EnemyFactory.coords(70 * (k * 2) + 50, 195),
           this.sounds,
@@ -94,7 +68,7 @@ class EnemyController {
 
     for (let i = 0; i < 7; i++) {
       for (let j = 0; j < 4; j++) {
-        this.private.push(
+        this.warriors.push(
           new Enemy(
             EnemyFactory.coords(70 * ((i + 1) * 2) + 50, 250 + (j + 1) * 100),
             this.sounds,

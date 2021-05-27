@@ -7,10 +7,12 @@ let playerShootSound;
 let enemiesShootSound;
 let enemyHitSound;
 let playerHitSound;
+let gameOverSound;
 let playerBullet;
 let enemyBullet;
 let playerController;
 let enemiesController;
+let asteroidController;
 
 function preload() {
   backgroundImg = loadImage(
@@ -19,6 +21,7 @@ function preload() {
   gameFont = loadFont("src/assets/fonts/kenvector_future_thin.ttf");
   bgSoundFile = loadSound("src/assets/sounds/spaceship shooter .wav");
   playerShootSound = loadSound("src/assets/sounds/Cancel or Gun (3).wav");
+  gameOverSound = loadSound("src/assets/sounds/Game Over sound effect.wav");
   enemiesShootSound = [
     loadSound("src/assets/sounds/Cancel or Gun (1).wav"),
     loadSound("src/assets/sounds/Cancel or Gun (2).wav"),
@@ -36,13 +39,14 @@ function setup() {
     GameFactory.coords(0, 0),
     gameState,
     gameFont,
-    { playerController, enemiesController }
+    { playerController, enemiesController, asteroidController },
+    gameOverSound
   );
 
   gameController.setup();
 
-  bgSoundFile.loop();
-  bgSoundFile.setVolume(0.1);
+  /* bgSoundFile.loop();
+  bgSoundFile.setVolume(0.1); */
 }
 
 function setupControllers() {
@@ -70,6 +74,10 @@ function setupControllers() {
     gameState,
     [playerShootSound, playerHitSound],
     { playerBullet, enemyBullet }
+  );
+  asteroidController = new AsteroidController(
+    AsteroidControllerFactory.coords(0, 0),
+    gameState
   );
 }
 

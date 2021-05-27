@@ -16,10 +16,10 @@ const BULLETS = {
 };
 
 const GAME_STATES = {
-  PAUSED: "pause",
   ON_PLAY: "play",
   GAME_OVER: "gameOver",
   MENU: "menu",
+  WIN: "win",
 };
 
 const BULLET_TYPES = {
