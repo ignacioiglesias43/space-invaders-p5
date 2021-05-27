@@ -1,6 +1,6 @@
 const SHIP_SPECS = { width: 54, height: 72, hb: 4 };
 
-const ASTEROID_SPECS = { width: 80, height: 80, hb: 0.5 };
+const ASTEROID_SPECS = { width: 80, height: 80, hb: 0.5, length: 10 };
 
 const BULLETS = {
   enemy: {
@@ -37,12 +37,16 @@ const ENEMIES = {
     height: 70,
     hb: 4,
     source: "src/assets/sprites/enemies/enemy-medium.gif",
+    length: 6,
   },
   PRIVATE: {
     width: 50,
     height: 50,
     hb: 6,
     source: "src/assets/sprites/enemies/enemy-small.gif",
+    row: 7,
+    column: 4,
+    length: 28,
   },
 };
 

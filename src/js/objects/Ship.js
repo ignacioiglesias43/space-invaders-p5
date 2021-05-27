@@ -1,5 +1,5 @@
 class Ship {
-  constructor(coords, controllSettings, sounds) {
+  constructor(coords, controllSettings, sounds, bullet, enemyBullet) {
     this.x = coords.x;
     this.y = coords.y;
     this.width = SHIP_SPECS.width;
@@ -12,14 +12,15 @@ class Ship {
       HitBoxFactory.coords(this.x, this.y - SHIP_SPECS.hb),
       HitBoxFactory.squareDims(56, 78)
     );
-    this.bullets = [];
+    this.bullet = bullet;
+    this.enemyBullet = enemyBullet;
   }
 
   draw() {
     this.img.position(this.x, this.y);
     this.img.size(this.width, this.height);
     this.move();
-    this.bullets.forEach((b) => b.draw());
+    this.bullet.draw();
   }
 
   moveLeft() {
@@ -45,18 +46,12 @@ class Ship {
   }
 
   shoot() {
-    this.bullets.push(
-      new Bullet(
-        BulletFactory.coords(
-          this.hb.x + this.width / 2 - BULLETS.player.width / 2,
-          this.hb.y - BULLETS.player.height - 20
-        ),
-        "src/assets/sprites/bullet/player-bullet.gif",
-        BULLET_TYPES.PLAYER
+    this.bullet.shoot(
+      BulletFactory.coords(
+        this.hb.x + this.width / 2 - BULLETS.player.width / 2,
+        this.hb.y - BULLETS.player.height - 20
       )
     );
-    this.sounds[0].play();
-    this.sounds[0].setVolume(0.3);
   }
 
   death() {

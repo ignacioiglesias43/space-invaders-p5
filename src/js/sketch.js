@@ -7,6 +7,8 @@ let playerShootSound;
 let enemiesShootSound;
 let enemyHitSound;
 let playerHitSound;
+let playerBullet;
+let enemyBullet;
 
 function preload() {
   backgroundImg = loadImage(
@@ -27,17 +29,30 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   gameState = GAME_STATES.ON_PLAY;
+  playerBullet = new Bullet(
+    13,
+    "src/assets/sprites/bullet/player-bullet.gif",
+    BULLET_TYPES.PLAYER,
+    playerShootSound
+  );
+  enemyBullet = new Bullet(
+    1,
+    "src/assets/sprites/bullet/enemy-bullet.gif",
+    BULLET_TYPES.ENEMY,
+    enemiesShootSound[0]
+  );
   gameController = new GameController(
     GameFactory.coords(0, 0),
     gameState,
     gameFont,
-    { playerShootSound, enemiesShootSound, enemyHitSound, playerHitSound }
+    { playerShootSound, enemiesShootSound, enemyHitSound, playerHitSound },
+    { playerBullet, enemyBullet }
   );
 
   gameController.setup();
 
-  bgSoundFile.loop();
-  bgSoundFile.setVolume(0.1);
+  /* bgSoundFile.loop();
+  bgSoundFile.setVolume(0.1); */
 }
 
 function draw() {

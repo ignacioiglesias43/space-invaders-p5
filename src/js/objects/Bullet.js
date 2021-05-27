@@ -1,7 +1,7 @@
 class Bullet {
-  constructor(coords, imagePath, type) {
-    this.x = coords.x;
-    this.y = coords.y;
+  constructor(speed, imagePath, type, sound) {
+    this.x = 0;
+    this.y = 0;
     this.img = createImg(imagePath, "Bullet");
     this.type = type;
     this.width = BULLETS[type].width;
@@ -13,13 +13,34 @@ class Bullet {
       ),
       HitBoxFactory.squareDims(this.width + 5, this.height + 5)
     );
-    this.speed = 3;
+    this.speed = speed;
+    this.canShoot = false;
+    this.hasCollided = false;
+    this.sound = sound;
+  }
+
+  shoot(coords) {
+    if (!this.canShoot) {
+      this.canShoot = true;
+      this.x = coords.x;
+      this.hb.x = coords.x;
+      this.y = coords.y;
+      this.hb.y = coords.y;
+      this.sound.play();
+      this.sound.setVolume(0.3);
+    }
   }
 
   draw() {
-    this.img.position(this.x, this.y);
-    this.img.size(this.width, this.height);
-    this.move();
+    if (this.canShoot) {
+      this.img.position(this.x, this.y);
+      this.img.size(this.width, this.height);
+      this.move();
+      if (this.borderReached()) {
+        this.canShoot = false;
+        // this.img.remove();
+      }
+    }
   }
 
   move() {
@@ -32,8 +53,17 @@ class Bullet {
     }
   }
 
+  reset() {
+    this.canShoot = false;
+    this.y = -100;
+    this.hb.y = -100;
+  }
+
+  borderReached = () => this.hb.y < -100 || this.hb.y > windowHeight;
+
   destroy() {
-    this.img.remove();
+    // this.img.remove();
+    this.hasCollided = true;
   }
 }
 

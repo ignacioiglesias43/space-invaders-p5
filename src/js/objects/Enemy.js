@@ -1,5 +1,5 @@
 class Enemy {
-  constructor(coords, sounds, type) {
+  constructor(coords, sounds, type, bullet, playerBullet) {
     this.x = coords.x;
     this.y = coords.y;
     this.width = 0;
@@ -9,7 +9,10 @@ class Enemy {
     this.img;
     this.speed = 3;
     this.hb;
-    this.bullets = [];
+    const index = ENEMY_TYPES.indexOf(this.type);
+    this.bullet = bullet;
+    this.playerBullet = playerBullet;
+    this.bullet.sound = this.sounds[0][index];
   }
 
   setup() {
@@ -27,7 +30,7 @@ class Enemy {
     this.img.position(this.x, this.y);
     this.img.size(this.width, this.height);
     this.move();
-    this.bullets.forEach((b) => b.draw());
+    this.bullet.draw();
   }
 
   canMoveRight = () => this.hb.x <= windowWidth - this.width - 10;
@@ -43,19 +46,12 @@ class Enemy {
   }
 
   shoot() {
-    this.bullets.push(
-      new Bullet(
-        BulletFactory.coords(
-          this.hb.x + this.width / 2 - BULLETS.enemy.width / 2,
-          this.hb.y + this.height + 20
-        ),
-        "src/assets/sprites/bullet/enemy-bullet.gif",
-        BULLET_TYPES.ENEMY
+    this.bullet.shoot(
+      BulletFactory.coords(
+        this.hb.x + this.width / 2 - BULLETS.enemy.width / 2,
+        this.hb.y + this.height + 20
       )
     );
-    const index = ENEMY_TYPES.indexOf(this.type);
-    this.sounds[0][index].play();
-    this.sounds[0][index].setVolume(0.3);
   }
 
   death() {

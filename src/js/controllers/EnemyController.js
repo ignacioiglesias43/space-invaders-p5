@@ -1,5 +1,5 @@
 class EnemyController {
-  constructor(coords, gameState, sounds) {
+  constructor(coords, gameState, sounds, bullets) {
     this.x = coords.x;
     this.y = coords.y;
     this.gameState = gameState;
@@ -9,6 +9,7 @@ class EnemyController {
     this.private = [];
     this.initialFireRate = 60;
     this.fireRate = this.initialFireRate;
+    this.bullets = bullets;
   }
 
   setup() {
@@ -41,14 +42,16 @@ class EnemyController {
 
   shoot() {
     if (frameCount % this.fireRate === 0) {
-      const chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
-      if (chosen === 0) {
-        this[ENEMY_TYPES[chosen].toLowerCase()].shoot();
-      } else {
-        const selected = Math.floor(
-          Math.random() * this[ENEMY_TYPES[chosen].toLowerCase()].length
-        );
-        this[ENEMY_TYPES[chosen].toLowerCase()][selected].shoot();
+      if (!this.bullets.enemyBullet.canShoot) {
+        const chosen = Math.floor(Math.random() * ENEMY_TYPES.length);
+        if (chosen === 0) {
+          this[ENEMY_TYPES[chosen].toLowerCase()].shoot();
+        } else {
+          const selected = Math.floor(
+            Math.random() * this[ENEMY_TYPES[chosen].toLowerCase()].length
+          );
+          this[ENEMY_TYPES[chosen].toLowerCase()][selected].shoot();
+        }
       }
     }
   }
@@ -58,8 +61,8 @@ class EnemyController {
       EnemyFactory.coords(windowWidth / 2, 15),
       this.sounds,
       ENEMY_TYPES[0],
-      this.mapHBLeft,
-      this.mapHBRight
+      this.bullets.enemyBullet,
+      this.bullets.playerBullet
     );
     Array.from(Array(6), (_, k) =>
       this.captain.push(
@@ -67,8 +70,8 @@ class EnemyController {
           EnemyFactory.coords(70 * (k * 2) + 50, 125),
           this.sounds,
           ENEMY_TYPES[1],
-          this.mapHBLeft,
-          this.mapHBRight
+          this.bullets.enemyBullet,
+          this.bullets.playerBullet
         )
       )
     );
@@ -80,8 +83,8 @@ class EnemyController {
             EnemyFactory.coords(70 * ((i + 1) * 2) + 50, 200 + (j + 1) * 100),
             this.sounds,
             ENEMY_TYPES[2],
-            this.mapHBLeft,
-            this.mapHBRight
+            this.bullets.enemyBullet,
+            this.bullets.playerBullet
           )
         );
       }
