@@ -12,6 +12,7 @@ class Enemy {
     this.bullet = bullet;
     this.playerBullet = playerBullet;
     this.playerController;
+    this.wasHitSound = sounds[1];
   }
 
   setup(playerController) {
@@ -27,6 +28,11 @@ class Enemy {
     this.bullet.sound = this.sounds[0][index];
     this.playerController = playerController;
   }
+
+  wasHit = () => {
+    this.wasHitSound.play();
+    this.wasHitSound.setVolume(0.3);
+  };
 
   draw() {
     this.img.position(this.x, this.y);
@@ -63,6 +69,7 @@ class Enemy {
     if (this.bulletSuccess(this.playerController.ship.hb)) {
       this.bullet.reset();
       // this.playerController.ship.death();
+      this.playerController.ship.wasHit();
       console.log("life --");
     }
   };

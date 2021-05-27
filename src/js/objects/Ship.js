@@ -15,11 +15,17 @@ class Ship {
     this.bullet = bullet;
     this.enemyBullet = enemyBullet;
     this.enemiesController;
+    this.wasHitSound = sounds[1];
   }
 
   setup(enemiesController) {
     this.enemiesController = enemiesController;
   }
+
+  wasHit = () => {
+    this.wasHitSound.play();
+    this.wasHitSound.setVolume(0.3);
+  };
 
   draw() {
     this.img.position(this.x, this.y);
@@ -65,12 +71,14 @@ class Ship {
   bulletShotEnemy = () => {
     if (this.bulletSuccess(this.enemiesController.general.hb)) {
       this.bullet.reset();
+      this.enemiesController.general.wasHit();
       this.enemiesController.general.death();
     }
 
     this.enemiesController.captain.forEach((e, index) => {
       if (this.bulletSuccess(e.hb)) {
         this.bullet.reset();
+        e.wasHit();
         e.death();
         this.enemiesController.captain.splice(index, 1);
       }
@@ -79,6 +87,7 @@ class Ship {
     this.enemiesController.private.forEach((e, index) => {
       if (this.bulletSuccess(e.hb)) {
         this.bullet.reset();
+        e.wasHit();
         e.death();
         this.enemiesController.private.splice(index, 1);
       }
