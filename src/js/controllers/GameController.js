@@ -33,18 +33,23 @@ class GameController {
     this.lives--;
     const element = this.printLives.pop();
     element.remove();
-    /* if (this.lives === 0) {
+    if (this.lives === 0) {
       this.gameState = GAME_STATES.GAME_OVER;
-    } */
+    }
   };
 
   gameOver() {
+    push();
+    this.printLives.forEach((life, index) => {
+      life.remove();
+    });
     fill(255);
     textAlign(CENTER);
     textSize(50);
     text("GAME OVER", this.x + 200, this.y + 200);
     text(`Score: ${this.points}`, this.x + 200, this.y + 200);
     text("Health: ", this.x + windowWidth - 180, this.y);
+    pop();
   }
 
   fillAsteroids() {
@@ -61,10 +66,21 @@ class GameController {
   }
 
   draw() {
-    this[gameState]();
+    if (this.gameState === GAME_STATES.ON_PLAY) {
+      this.play();
+    } else if (this.gameState === GAME_STATES.GAME_OVER) {
+      this.gameOver();
+    } else if (this.gameState === GAME_STATES.MENU) {
+      this.menu();
+    } else {
+      this.pause();
+    }
   }
 
+  menu() {}
+
   play() {
+    push();
     this.ship.draw();
     this.enemies.draw();
     this.asteroids.forEach((a) => a.draw());
@@ -75,10 +91,7 @@ class GameController {
       life.position(this.x + 410 + SHIP_SPECS.width * index, this.y + 20);
       life.size(SHIP_SPECS.width - 20, SHIP_SPECS.height - 20);
     });
-    /* if (this.lives === 0) {
-      this.gameState = GAME_STATES.GAME_OVER;
-      this.gameOver();
-    } */
+    pop();
   }
 
   pause() {
