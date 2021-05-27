@@ -1,12 +1,14 @@
 class AsteroidController {
-  constructor(coords, gameState) {
+  constructor(coords, gameState, sound) {
     this.x = coords.x;
     this.y = coords.y;
     this.gameState = gameState;
     this.asteroids = [];
+    this.sound = sound;
   }
 
   setup() {
+    this.asteroids = [];
     Array.from(Array(10), (_, k) =>
       this.asteroids.push(
         new Asteroid(
@@ -18,6 +20,11 @@ class AsteroidController {
       )
     );
   }
+
+  wasHit = () => {
+    this.sound.play();
+    this.sound.setVolume(0.3);
+  };
 
   draw() {
     this.asteroids.forEach((a) => a.draw());

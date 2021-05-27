@@ -8,6 +8,8 @@ let enemiesShootSound;
 let enemyHitSound;
 let playerHitSound;
 let gameOverSound;
+let winSound;
+let asteroidHitSound;
 let playerBullet;
 let enemyBullet;
 let playerController;
@@ -16,7 +18,7 @@ let asteroidController;
 
 function preload() {
   backgroundImg = loadImage(
-    "src/assets/sprites/backgrounds/desert-backgorund-looped.png"
+    "src/assets/sprites/backgrounds/desert-backgorund-looped copia.png"
   );
   gameFont = loadFont("src/assets/fonts/kenvector_future_thin.ttf");
   bgSoundFile = loadSound("src/assets/sounds/spaceship shooter .wav");
@@ -29,6 +31,8 @@ function preload() {
   ];
   enemyHitSound = loadSound("src/assets/sounds/bonk.wav");
   playerHitSound = loadSound("src/assets/sounds/roblox.wav");
+  asteroidHitSound = loadSound("src/assets/sounds/rockhit.wav");
+  winSound = loadSound("src/assets/sounds/win.wav");
 }
 
 function setup() {
@@ -40,13 +44,14 @@ function setup() {
     gameState,
     gameFont,
     { playerController, enemiesController, asteroidController },
-    gameOverSound
+    gameOverSound,
+    winSound
   );
 
   gameController.setup();
 
-  /* bgSoundFile.loop();
-  bgSoundFile.setVolume(0.1); */
+  bgSoundFile.loop();
+  bgSoundFile.setVolume(0.1);
 }
 
 function setupControllers() {
@@ -77,7 +82,8 @@ function setupControllers() {
   );
   asteroidController = new AsteroidController(
     AsteroidControllerFactory.coords(0, 0),
-    gameState
+    gameState,
+    asteroidHitSound
   );
 }
 

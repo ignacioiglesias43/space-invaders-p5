@@ -5,12 +5,14 @@ class GameController {
     font,
     controllers,
     gameOverSound,
+    winSound,
     points = 0,
     lives = 3
   ) {
     this.x = coords.x;
     this.y = coords.y;
     this.gameState = gameState;
+    this.winSound = winSound;
     this.gameOverSound = gameOverSound;
     this.points = points;
     this.lives = lives;
@@ -29,7 +31,7 @@ class GameController {
 
   setup() {
     this.ship.setup(this.enemies);
-    this.enemies.setup(this.ship);
+    this.enemies.setup(this.ship, this.asteroids);
     this.ship.wonCallback = () => (this.gameState = GAME_STATES.WIN);
     this.asteroids.setup();
     Array.from(Array(this.lives), () =>
@@ -186,14 +188,16 @@ class GameController {
       life.size(SHIP_SPECS.width - 20, SHIP_SPECS.height - 20);
     });
     if (this.enemies.warriors.length === 0) {
+      this.winSound.play();
+      this.winSound.setVolume(0.1);
       this.gameState = GAME_STATES.WIN;
     }
   }
 
   reset() {
     this.ship.setup(this.enemies);
-    this.enemies.setup(this.ship);
     this.asteroids.setup();
+    this.enemies.setup(this.ship, this.asteroids);
     this.lives = 3;
     this.points = 0;
     this.printLives = [];

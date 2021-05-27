@@ -11,11 +11,11 @@ class EnemyController {
     this.takeLifeCallback = () => {};
   }
 
-  setup(playerController) {
+  setup(playerController, asteroidController) {
     this.warriors = [];
     this.fillEnemies();
     this.warriors.forEach((e) => {
-      e.setup(playerController);
+      e.setup(playerController, asteroidController);
       e.takeLifeCallback = this.takeLifeCallback;
     });
   }
@@ -38,7 +38,7 @@ class EnemyController {
   shoot() {
     if (frameCount % this.fireRate === 0) {
       if (!this.bullets.enemyBullet.canShoot) {
-        let chosen = Math.floor(Math.random() * this.warriors.length);
+        const chosen = Math.floor(Math.random() * this.warriors.length);
         this.warriors[chosen].shoot();
       }
     }

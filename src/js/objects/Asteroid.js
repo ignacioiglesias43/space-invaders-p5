@@ -6,6 +6,7 @@ class Asteroid {
     this.imgInstance;
     this.width = ASTEROID_SPECS.width;
     this.height = ASTEROID_SPECS.height;
+    this.lives = 4;
     this.hb = new HitBox(
       HitBoxFactory.coords(
         this.x - ASTEROID_SPECS.hb,
@@ -19,8 +20,9 @@ class Asteroid {
     this.imgInstance = image(this.img, this.x, this.y, this.width, this.height);
   }
 
-  destroy() {
-    this.imgInstance.remove();
+  death() {
+    // this.imgInstance.remove();
+    this.lives--;
   }
 }
 

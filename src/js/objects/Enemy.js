@@ -12,12 +12,13 @@ class Enemy {
     this.bullet = bullet;
     this.playerBullet = playerBullet;
     this.playerController;
+    this.asteroidController;
     this.wasHitSound = sounds[1];
     this.takeLifeCallback = () => {};
     this.isDead = false;
   }
 
-  setup(playerController) {
+  setup(playerController, asteroidController) {
     const enemyType = ENEMIES[this.type];
     const index = ENEMY_TYPES.indexOf(this.type);
     this.img = createImg(enemyType.source, this.type);
@@ -29,6 +30,7 @@ class Enemy {
     );
     this.bullet.sound = this.sounds[0][index];
     this.playerController = playerController;
+    this.asteroidController = asteroidController;
     this.isDead = false;
   }
 
@@ -74,6 +76,16 @@ class Enemy {
       this.playerController.ship.wasHit();
       this.takeLifeCallback();
     }
+    this.asteroidController.asteroids.forEach((a, index) => {
+      if (this.bulletSuccess(a.hb)) {
+        this.bullet.reset();
+        a.death();
+        this.asteroidController.wasHit();
+        if (a.lives <= 0) {
+          this.asteroidController.asteroids.splice(index, 1);
+        }
+      }
+    });
   };
 
   bulletSuccess = (hb) => this.bullet.hb.wasHitSquare(hb);
