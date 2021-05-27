@@ -74,7 +74,7 @@ class EnemyController {
 
   fillEnemies() {
     this.general = new Enemy(
-      EnemyFactory.coords(windowWidth / 2, 65),
+      EnemyFactory.coords(windowWidth / 2 - ENEMIES.GENERAL.width / 2, 65),
       this.sounds,
       ENEMY_TYPES[0],
       this.bullets.enemyBullet,

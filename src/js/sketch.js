@@ -30,7 +30,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  gameState = GAME_STATES.ON_PLAY;
+  gameState = GAME_STATES.MENU;
   setupControllers();
   gameController = new GameController(
     GameFactory.coords(0, 0),
@@ -41,8 +41,8 @@ function setup() {
 
   gameController.setup();
 
-  /* bgSoundFile.loop();
-  bgSoundFile.setVolume(0.1); */
+  bgSoundFile.loop();
+  bgSoundFile.setVolume(0.1);
 }
 
 function setupControllers() {
